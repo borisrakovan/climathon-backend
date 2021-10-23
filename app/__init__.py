@@ -1,5 +1,7 @@
 import os
 from flask import Flask
+from flask_cors import CORS
+
 from app.config import Config
 import logging
 from logging.handlers import RotatingFileHandler
@@ -8,6 +10,7 @@ from logging.handlers import RotatingFileHandler
 app = Flask(__name__)
 app.config.from_object(Config)
 
+CORS(app)
 
 def mkdir(dir):
     if not os.path.exists(dir):

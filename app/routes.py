@@ -19,7 +19,7 @@ def index():
     if "toCoord" not in data:
         return "Missing parameter: toCoord", 400
 
-    index = np.random.rand(16, 20)
+    index = np.random.rand(80, 120)
     return {
         "result": {
             "fromCoord": data["fromCoord"],
