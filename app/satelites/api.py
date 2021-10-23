@@ -1,7 +1,7 @@
 
 from sentinelhub import SHConfig, MimeType, CRS, BBox, SentinelHubRequest, SentinelHubDownloadClient, \
     DataCollection, bbox_to_dimensions, DownloadRequest, WmsRequest
-
+import numpy as np
 import logging
 from typing import List, Optional
 from config import constants
@@ -44,9 +44,12 @@ def get_thermal_data(coords_bbox: Optional[List] = [17.006149, 48.087483, 17.227
     )
 
     try:
-        imgs = request_true_color.get_data()
+        img = request_true_color.get_data()[0]
+        img = ((img - 250) / 70)
+        img[np.isnan(img)] = 0
 
-        return imgs[0]
+        return img.tolist()
+
     except Exception as e:
         print(f"unable to fetch Landsat8 thermal data. {e}")
         logger.error(f"unable to fetch Landsat8 thermal data. {e}")
