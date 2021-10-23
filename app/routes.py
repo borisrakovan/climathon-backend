@@ -13,17 +13,10 @@ def test():
 def index():
     data = request.get_json(force=True)
 
-    if "fromCoord" not in data:
-        return "Missing parameter: fromCoord", 400
-
-    if "toCoord" not in data:
-        return "Missing parameter: toCoord", 400
-
     index = np.random.rand(80, 120)
+
     return {
         "result": {
-            "fromCoord": data["fromCoord"],
-            "toCoord": data["toCoord"],
-            "index": get_thermal_data(coords_bbox=data["bound"])
+            "index": get_thermal_data(coords_bbox=data["bounds"]).tolist()
         }
     }
