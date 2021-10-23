@@ -1,6 +1,6 @@
 import numpy as np
 from flask import request, Response
-from .satelites.api import get_thermal_data
+from .satelites.api import get_thermal_data, get_ndvi_index
 from app import app
 
 
@@ -18,11 +18,18 @@ def thermal_test():
     }
 
 
+@app.route("/ndvi")
+def ndvi_test():
+    return {
+        "result": {
+            "index": get_ndvi_index()
+        }
+    }
+
+
 @app.route("/index", methods=["POST"])
 def index():
     data = request.get_json(force=True)
-
-    index = np.random.rand(80, 120)
 
     return {
         "result": {
