@@ -11,7 +11,6 @@ def get_thermal_data(coords_bbox: Optional[List] = [17.006149, 48.087483, 17.227
                      bounds_size: Optional[List] = (500, 500),
                      date_interval: Optional[List] = None):
 
-    print(bounds_size)
     logger = logging.getLogger("climathon-backend")
     eval_thermal = """
         //VERSION=3
@@ -55,6 +54,6 @@ def get_thermal_data(coords_bbox: Optional[List] = [17.006149, 48.087483, 17.227
 
     except Exception as e:
         print(f"unable to fetch Landsat8 thermal data. {e}")
-        logger.error(f"unable to fetch Landsat8 thermal data. {e}")
+        logger.error(f"unable to fetch Landsat8 thermal data. Bbox: {coords_bbox}, Size: {bounds_size} {e}")
 
 

@@ -9,20 +9,9 @@ def test():
     return f'Hi! Debug: {app.config["DEBUG"]}'
 
 
-@app.route("/thermal")
-def thermal_test():
-    return {
-        "result": {
-            "index": get_thermal_data()
-        }
-    }
-
-
 @app.route("/index", methods=["POST"])
 def index():
     data = request.get_json(force=True)
-
-    index = np.random.rand(80, 120)
 
     return {
         "result": {
