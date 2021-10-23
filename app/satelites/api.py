@@ -11,6 +11,7 @@ def get_thermal_data(coords_bbox: Optional[List] = [17.006149, 48.087483, 17.227
                      bounds_size: Optional[List] = (500, 500),
                      date_interval: Optional[List] = None):
 
+    print(bounds_size)
     logger = logging.getLogger("climathon-backend")
     eval_thermal = """
         //VERSION=3
