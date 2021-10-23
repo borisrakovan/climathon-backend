@@ -23,6 +23,6 @@ def index():
         "result": {
             "fromCoord": data["fromCoord"],
             "toCoord": data["toCoord"],
-            "index": get_thermal_data(coords_bbox=data["bound"])
+            "index": get_thermal_data(coords_bbox=data["bounds"])
         }
     }
