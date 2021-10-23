@@ -9,6 +9,15 @@ def test():
     return f'Hi! Debug: {app.config["DEBUG"]}'
 
 
+@app.route("/thermal")
+def thermal_test():
+    return {
+        "result": {
+            "index": get_thermal_data()
+        }
+    }
+
+
 @app.route("/index", methods=["POST"])
 def index():
     data = request.get_json(force=True)
@@ -19,7 +28,7 @@ def index():
         "result": {
             "bounds": data["bounds"],
             "size": data['size'],
-            "index": get_thermal_data(coords_bbox=data["bounds"], bounds_size=[data['size']])
+            "index": get_thermal_data(coords_bbox=data["bounds"], bounds_size=data['size'])
         }
     }
 
