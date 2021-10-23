@@ -1,6 +1,6 @@
 import numpy as np
 from flask import request, Response
-
+from .satelites.api import get_thermal_data
 from app import app
 
 
@@ -24,6 +24,6 @@ def index():
         "result": {
             "fromCoord": data["fromCoord"],
             "toCoord": data["toCoord"],
-            "index": index.tolist()
+            "index": get_thermal_data(coords_bbox=data["bound"])
         }
     }
