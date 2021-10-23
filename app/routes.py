@@ -22,3 +22,21 @@ def index():
             "index": get_thermal_data(coords_bbox=data["bounds"], bounds_size=[data['size']])
         }
     }
+
+
+@app.route("/factors", methods=["GET"])
+def factors():
+    return [
+        {
+            "id": 1,
+            "name": "Heat islands",
+        },
+        {
+            "id": 2,
+            "name": "Air pollution",
+        },
+        {
+            "id": 3,
+            "name": "Precipitation",
+        },
+    ]
