@@ -1,6 +1,6 @@
 import numpy as np
 from flask import request, Response
-
+from .satelites.api import get_thermal_data
 from app import app
 
 
@@ -19,11 +19,10 @@ def index():
     if "toCoord" not in data:
         return "Missing parameter: toCoord", 400
 
-    index = np.random.rand(16, 20)
     return {
         "result": {
             "fromCoord": data["fromCoord"],
             "toCoord": data["toCoord"],
-            "index": index.tolist()
+            "index": get_thermal_data(coords_bbox=data["bound"])
         }
     }
