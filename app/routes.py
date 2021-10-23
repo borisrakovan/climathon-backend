@@ -16,6 +16,7 @@ def index():
     return {
         "result": {
             "bounds": data["bounds"],
-            "index": get_thermal_data(coords_bbox=data["bounds"])
+            "size": data['size'],
+            "index": get_thermal_data(coords_bbox=data["bounds"], bounds_size=[data['size']])
         }
     }
