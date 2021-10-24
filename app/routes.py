@@ -12,6 +12,7 @@ from .satelites.api import HeatFactor, VegetationFactor
 def test():
     return f'Hi! Debug: {app.config["DEBUG"]}'
 
+
 @app.route("/thermal")
 def thermal_test():
     factor = HeatFactor()
@@ -35,14 +36,15 @@ def ndvi_test():
         }
     }
 
+
 @app.route("/index", methods=["POST"])
 def index():
     data = request.get_json(force=True)
 
     size = data["size"]
     bounds = data["bounds"]
-    input_factors = data["factorWeights"]
-
+    input_factors = data.get("factorWeights")
+    print(input_factors)
     if input_factors is None or len(input_factors) == 0 or sum(input_factors.values()) == 0.:
         factors = all_factors
         weights = [1] * len(factors)
@@ -51,8 +53,6 @@ def index():
         weights = [input_factors[f.id] for f in factors]
 
     index = Greendex.compute(factors, weights, bounds, size)
-
-    pollution_index = PollutionFactor()
 
     return {
         "result": {
@@ -66,5 +66,11 @@ def index():
 @app.route("/factors", methods=["GET"])
 def factors():
     return {
-        "result": [f._asdict() for f in all_factors]
+        "result": [
+            {
+                "id": f.id,
+                "name": f.name,
+            }
+            for f in all_factors
+        ]
     }

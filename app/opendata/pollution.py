@@ -34,7 +34,11 @@ class PollutionFactor(BaseFactor):
         radius = 1000
         radius_lat = self.meters_to_lat(radius)
 
-        r = int(y_dim * (radius_lat / (lat2 - lat1)))
+        r = int(0.005 / ((lat2 - lat1) / y_dim))
+        sigma = int(0.0008 / ((lat2 - lat1) / y_dim))
+        print(f"r = {r}")
+        print(f"o = {sigma}")
+        # r = int(y_dim * (radius_lat / (lat2 - lat1)))
 
         index_temp = np.zeros((y_dim + 2 * r, x_dim + 2 * r), dtype=np.float32)
         # index = np.zeros((y_dim, x_dim))
@@ -46,14 +50,15 @@ class PollutionFactor(BaseFactor):
             y_mid = y_dim - y - 1 + r
             # y_frm, y_to = max(0, y-r), min(y_dim-1, y+r)
             # x_frm, x_to = max(0, x-r), min(x_dim-1, x+r)
+            # print(gaussian_kernel(l=r * 2 + 1))
             index_temp[(y_mid - r):(y_mid + r + 1), (x_mid - r):(x_mid + r + 1)] \
-                += gaussian_kernel(l=r * 2 + 1)
+                += gaussian_kernel(l=r * 2 + 1, sig=sigma)
             # index_temp[y_mid, x_mid] += 1
 
         index = index_temp[r:y_dim + r, r:x_dim + r]
-        print(index_temp.shape)
-        print(index.shape)
-        print(index[index != 0].shape)
+        # print(index_temp.shape)
+        # print(index.shape)
+        # print(index[index != 0].shape)
 
         normalized = minmax_normalize(index)
         return normalized

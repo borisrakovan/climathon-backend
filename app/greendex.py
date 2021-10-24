@@ -3,14 +3,15 @@ from collections import namedtuple
 from typing import List
 
 from .opendata.pollution import PollutionFactor
-from .satelites.api import HeatFactor
+from .satelites.api import HeatFactor, VegetationFactor
 
 FactorTuple = namedtuple("FactorTuple", "id,name,cls")
 F = FactorTuple
 
 all_factors = [
-    F("1", "Heat islands", HeatFactor),
+    # F("1", "Heat islands", HeatFactor),
     F("2", "Sources of pollution", PollutionFactor),
+    # F("3", "Vegetation", VegetationFactor),
 ]
 
 

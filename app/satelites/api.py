@@ -103,7 +103,7 @@ class VegetationFactor(BaseFactor):
             img = img / 255.0
             img = np.clip(img, 0, 1)
 
-            return img.tolist()
+            return 1 - img
 
         except Exception as e:
             logger.error(f"Unable to fetch Sentinel2 thermal data. {e}")
