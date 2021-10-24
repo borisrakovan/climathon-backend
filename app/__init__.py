@@ -18,6 +18,7 @@ def mkdir(dir):
 
 
 mkdir(app.config["LOG_DIR"])
+mkdir(app.config["DATA_DIR"])
 
 if not app.debug:
     # logging to file
