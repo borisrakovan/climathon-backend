@@ -2,9 +2,8 @@ from collections import namedtuple
 
 import numpy as np
 from flask import request, Response
-
+from .satelites.api import get_thermal_data, get_ndvi_index
 from .opendata.pollution import PollutionFactor
-from .satelites.api import get_thermal_data
 from app import app
 
 
@@ -34,6 +33,15 @@ def thermal_test():
     }
 
 
+@app.route("/ndvi")
+def ndvi_test():
+    return {
+        "result": {
+            "index": get_ndvi_index()
+        }
+    }
+
+
 @app.route("/index", methods=["POST"])
 def index():
     data = request.get_json(force=True)
@@ -54,6 +62,7 @@ def index():
     # weights =
     # final_index = np.average(index_values, axis=0, weights=0)
     pollution_index = PollutionFactor()
+
     return {
         "result": {
             "bounds": data["bounds"],
