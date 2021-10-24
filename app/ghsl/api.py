@@ -11,11 +11,14 @@ from scipy.interpolate import RegularGridInterpolator
 from shapely.geometry import box
 
 from app.factor import BaseFactor
-
+from app.utils import minmax_normalize
+from app import Config
+import os
 
 class GhslFactor(BaseFactor):
 
-    TIF_PATH = '../data/GHS_POP_E2015_GLOBE_R2019A_54009_250_V1_0.tif'
+    def __init__(self):
+        self.TIF_PATH = os.path.join(Config.DATA_DIR, 'GHS_POP_E2015_GLOBE_R2019A_54009_250_V1_0.tif')
 
     @staticmethod
     def get_features(gdf):
@@ -49,6 +52,8 @@ class GhslFactor(BaseFactor):
             yv, xv = np.meshgrid(np.linspace(0, 1.0 / m, size[0]), np.linspace(0, 1.0 / m, size[1]))
 
             out_image = interpolating_function((xv, yv))
+            out_image[out_image < 0] = 0
+            out_image = minmax_normalize(out_image)
 
             return out_image
 
