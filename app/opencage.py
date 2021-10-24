@@ -1,18 +1,25 @@
 from pprint import pprint
+
 from opencage.geocoder import OpenCageGeocode
 
 
+class AddressNotFound(Exception):
+    pass
+
 class OpenCageClient:
-    API_KEY = '5dd1b2de544444e7aefb94afd0ce71e5'
+    API_KEY = '212a30196457498c9b9e30e46ea543fc'
 
     def __init__(self):
         self.geocoder = OpenCageGeocode(self.API_KEY)
 
     def geocode(self, address):
-        query = u'Bosutska ulica 10, Trnje, Zagreb, Croatia'
-        results = self.geocoder.geocode(query)
-        print(u'%f;%f;%s;%s' % (results[0]['geometry']['lat'],
-                                results[0]['geometry']['lng'],
-                                results[0]['components']['country_code'],
-                                results[0]['annotations']['timezone']['name']))
+        results = self.geocoder.geocode(address)
+        if len(results) == 0:
+            raise AddressNotFound()
+
+        return results[0]['geometry']['lat'], results[0]['geometry']['lng']
+
+    def reverse_geocode(self, lat, long):
+        results = self.geocoder.reverse_geocode(lat, long)
+        return results
 

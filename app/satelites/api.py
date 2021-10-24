@@ -8,7 +8,7 @@ from config import constants
 
 
 def get_thermal_data(coords_bbox: Optional[List] = [17.006149, 48.087483, 17.227249, 48.21598],
-                     bounds_size: Optional[List] = (500, 500),
+                     bounds_size: Optional[List] = [500, 500],
                      date_interval: Optional[List] = None):
 
     logger = logging.getLogger("climathon-backend")
@@ -41,12 +41,13 @@ def get_thermal_data(coords_bbox: Optional[List] = [17.006149, 48.087483, 17.227
             SentinelHubRequest.output_response('default', MimeType.TIFF),
         ],
         bbox=BBox(bbox=coords_bbox, crs=CRS.WGS84),
-        size=bounds_size,
+        size=tuple(bounds_size),
         config=constants.SENTINEL_HUB_AUTH_CONFIG
     )
 
     try:
         img = request_true_color.get_data()[0]
+
         img = ((img - 250) / 70)
         img[np.isnan(img)] = 0
 
