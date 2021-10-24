@@ -23,7 +23,6 @@ def get_factor(id):
 def test():
     return f'Hi! Debug: {app.config["DEBUG"]}'
 
-
 @app.route("/thermal")
 def thermal_test():
     return {
@@ -40,7 +39,6 @@ def ndvi_test():
             "index": get_ndvi_index()
         }
     }
-
 
 @app.route("/index", methods=["POST"])
 def index():
