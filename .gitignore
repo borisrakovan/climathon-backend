@@ -134,4 +134,4 @@ dmypy.json
 logs/
 .DS_Store
 
-app/data/*.tif
+app/data/*0.tif

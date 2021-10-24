@@ -1,4 +1,5 @@
 import json
+import os
 from typing import List
 
 import geopandas as gpd
@@ -10,16 +11,16 @@ from rasterio.plot import show
 from scipy.interpolate import RegularGridInterpolator
 from shapely.geometry import box
 
+from app import Config
 from app.factor import BaseFactor
 from app.utils import minmax_normalize
-from app import Config
-import os
+
 
 
 class GhslFactor(BaseFactor):
 
     def __init__(self):
-        self.TIF_PATH = os.path.join(Config.DATA_DIR, 'GHS_POP_E2015_GLOBE_R2019A_54009_250_V1_0.tif')
+        self.TIF_PATH = os.path.join(Config.DATA_DIR, 'GHS_POP_E2015_GLOBE_R2019A_54009_250_V1_0_19_3.tif')
 
     @staticmethod
     def get_features(gdf):
@@ -55,7 +56,12 @@ class GhslFactor(BaseFactor):
             out_image = interpolating_function((xv, yv))
             out_image[out_image < 0] = 0
             out_image = minmax_normalize(out_image)
-
+            out_image *= 2
+            # out_image -= 1
+            # out_image *= -1
+            # mean = 0.5
+            out_image = [out_image > 1.2] * (2 - out_image) + [out_image <= 1.2] * out_image
+            out_image = minmax_normalize(out_image)
             return out_image
 
 
