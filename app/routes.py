@@ -1,26 +1,39 @@
 
 import numpy as np
 from flask import request, Response
+from .opendata.pollution import PollutionFactor
 
 from app import app
 from .greendex import all_factors, Greendex
-from .satelites.api import HeatFactor
+from .satelites.api import HeatFactor, VegetationFactor
 
 
 @app.route('/', methods=["GET"])
 def test():
     return f'Hi! Debug: {app.config["DEBUG"]}'
 
-
 @app.route("/thermal")
 def thermal_test():
     factor = HeatFactor()
     return {
         "result": {
-            "index": factor.get_index_layer(bounds=[17.006149, 48.087483, 17.227249, 48.21598], size=[500, 500])
+            "index": factor.get_index_layer(
+                bounds=[17.006149, 48.087483, 17.227249, 48.21598],
+                size=[500, 500])
         }
     }
 
+
+@app.route("/ndvi")
+def ndvi_test():
+    factor = VegetationFactor()
+    return {
+        "result": {
+            "index": factor.get_index_layer(
+                bounds=[17.006149, 48.087483, 17.227249, 48.21598],
+                size=[500, 500])
+        }
+    }
 
 @app.route("/index", methods=["POST"])
 def index():
@@ -38,6 +51,8 @@ def index():
         weights = [input_factors[f.id] for f in factors]
 
     index = Greendex.compute(factors, weights, bounds, size)
+
+    pollution_index = PollutionFactor()
 
     return {
         "result": {
