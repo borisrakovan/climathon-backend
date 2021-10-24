@@ -36,21 +36,24 @@ class EnergyConsumption(BaseFactor):
         r = int(0.005 / ((lat2 - lat1) / y_dim))
         sigma = max(1, round(0.0008 / ((lat2 - lat1) / y_dim)))
         print(f"r = {r}")
+
         print(f"o = {sigma}")
 
         index_temp = np.zeros((y_dim + 2 * r, x_dim + 2 * r), dtype=np.float32)
 
         for idx, row in df.iterrows():
+            sigma = sigma * max(0.2, row['scaled_value'] * 10)
+
             x, y = to_coords(row["lat"], row["long"])
             x_mid = x + r
             y_mid = y_dim - y - 1 + r
             index_temp[(y_mid - r):(y_mid + r + 1), (x_mid - r):(x_mid + r + 1)] \
-                += gaussian_kernel(l=r * 2 + 1, sig=sigma * row['scaled_value'])
+                += gaussian_kernel(l=r * 2 + 1, sig=sigma)
 
         index = index_temp[r:y_dim + r, r:x_dim + r]
 
         normalized = minmax_normalize(index)
-        return normalized
+        return 1 - normalized
 
 
     @staticmethod
