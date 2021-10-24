@@ -2,7 +2,6 @@
 import os
 from typing import List
 import numpy as np
-from app import app
 import pandas as pd
 from app.factor import BaseFactor
 
@@ -13,6 +12,7 @@ from app.utils import minmax_normalize, show_heatmap
 
 class PublicTransportFactor(BaseFactor):
     def __init__(self):
+        from app import app
         path = os.path.join(app.config["DATA_DIR"], "mhd_aut_processed.pickle")
         self.df = pd.read_pickle(path)
 

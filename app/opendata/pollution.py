@@ -6,12 +6,12 @@ from typing import List
 import pandas as pd
 
 from app.factor import BaseFactor
-from app import app
 from app.utils import gaussian_kernel, minmax_normalize
 
 
 class PollutionFactor(BaseFactor):
     def __init__(self):
+        from app import app
         path = os.path.join(app.config["DATA_DIR"], "zdroje_znecistenia_processed.pickle")
         self.df = pd.read_pickle(path)
 

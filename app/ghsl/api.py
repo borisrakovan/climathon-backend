@@ -11,11 +11,13 @@ from scipy.interpolate import RegularGridInterpolator
 from shapely.geometry import box
 
 from app.factor import BaseFactor
+import os
+from app import app
 
 
 class GhslFactor(BaseFactor):
-
-    TIF_PATH = '../data/GHS_POP_E2015_GLOBE_R2019A_54009_250_V1_0.tif'
+    def __init__(self):
+        self.TIF_PATH = os.path.join(app.config["DATA_DIR"], "GHS_POP_E2015_GLOBE_R2019A_54009_250_V1_0.tif")
 
     @staticmethod
     def get_features(gdf):
