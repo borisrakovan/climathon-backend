@@ -52,7 +52,7 @@ class HeatFactor(BaseFactor):
             img[np.isnan(img)] = 0
             img = np.clip(img, 0, 1)
 
-            return img
+            return 1 - img
 
         except Exception as e:
             print(f"unable to fetch Landsat8 thermal data. {e}")
@@ -103,7 +103,7 @@ class VegetationFactor(BaseFactor):
             img = img / 255.0
             img = np.clip(img, 0, 1)
 
-            return 1 - img
+            return img
 
         except Exception as e:
             logger.error(f"Unable to fetch Sentinel2 thermal data. {e}")

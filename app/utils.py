@@ -12,8 +12,13 @@ def gaussian_kernel(l, sig=1.):
     return kernel / np.sum(kernel)
 
 
-def minmax_normalize(arr):
-    return (arr - np.min(arr)) / np.ptp(arr)
+def minmax_normalize(arr, min=None, max=None):
+    if min is None:
+        min = np.min(arr)
+    if max is None:
+        max = np.max(arr)
+
+    return (arr - np.min(arr)) / (max - min)
 
 
 def show_heatmap(arr):

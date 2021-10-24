@@ -31,13 +31,13 @@ class PollutionFactor(BaseFactor):
         df = self.df[self.df.apply(lambda row: is_valid_coords(row["lat"], row["long"]), axis=1)]
         # print(df["adresa"])
 
-        radius = 1000
-        radius_lat = self.meters_to_lat(radius)
+        # radius = 1000
+        # radius_lat = self.meters_to_lat(radius)
 
         r = int(0.005 / ((lat2 - lat1) / y_dim))
         sigma = int(0.0008 / ((lat2 - lat1) / y_dim))
-        print(f"r = {r}")
-        print(f"o = {sigma}")
+        # print(f"r = {r}")
+        # print(f"o = {sigma}")
         # r = int(y_dim * (radius_lat / (lat2 - lat1)))
 
         index_temp = np.zeros((y_dim + 2 * r, x_dim + 2 * r), dtype=np.float32)
@@ -61,7 +61,7 @@ class PollutionFactor(BaseFactor):
         # print(index[index != 0].shape)
 
         normalized = minmax_normalize(index)
-        return normalized
+        return 1 - normalized
 
 
     @staticmethod
