@@ -2,9 +2,8 @@ from collections import namedtuple
 
 import numpy as np
 from flask import request, Response
-
+from .satelites.api import get_thermal_data, get_ndvi_index
 from .opendata.pollution import PollutionFactor
-from .satelites.api import get_thermal_data
 from app import app
 
 
@@ -24,6 +23,22 @@ def get_factor(id):
 def test():
     return f'Hi! Debug: {app.config["DEBUG"]}'
 
+@app.route("/thermal")
+def thermal_test():
+    return {
+        "result": {
+            "index": get_thermal_data()
+        }
+    }
+
+
+@app.route("/ndvi")
+def ndvi_test():
+    return {
+        "result": {
+            "index": get_ndvi_index()
+        }
+    }
 
 @app.route("/index", methods=["POST"])
 def index():
