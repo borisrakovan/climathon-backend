@@ -34,7 +34,7 @@ class EnergyConsumption(BaseFactor):
         radius_lat = self.meters_to_lat(radius)
 
         r = int(0.005 / ((lat2 - lat1) / y_dim))
-        sigma = int(0.0008 / ((lat2 - lat1) / y_dim))
+        sigma = max(1, round(0.0008 / ((lat2 - lat1) / y_dim)))
         print(f"r = {r}")
         print(f"o = {sigma}")
 
