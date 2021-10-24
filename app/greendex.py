@@ -2,6 +2,7 @@ import numpy as np
 from collections import namedtuple
 from typing import List
 
+from .energy.api import EnergyConsumption
 from .opendata.pollution import PollutionFactor
 from .opendata.public_transport import PublicTransportFactor
 from .satelites.api import HeatFactor, VegetationFactor
@@ -16,6 +17,7 @@ all_factors = [
     F("3", "Vegetation", VegetationFactor),
     F("4", "Human settlements density", GhslFactor),
     F("5", "Public transport availability", PublicTransportFactor),
+    F("6", "Average energy consumption", EnergyConsumption),
 ]
 
 
