@@ -6,6 +6,7 @@ from opencage.geocoder import OpenCageGeocode
 class AddressNotFound(Exception):
     pass
 
+
 class OpenCageClient:
     API_KEY = '212a30196457498c9b9e30e46ea543fc'
 

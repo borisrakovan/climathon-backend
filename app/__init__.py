@@ -12,6 +12,7 @@ app.config.from_object(Config)
 
 CORS(app)
 
+
 def mkdir(dir):
     if not os.path.exists(dir):
         os.mkdir(dir)

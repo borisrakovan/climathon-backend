@@ -1,23 +1,10 @@
-from collections import namedtuple
 
 import numpy as np
 from flask import request, Response
 
-from .opendata.pollution import PollutionFactor
-from .satelites.api import get_thermal_data
 from app import app
-
-
-FactorTuple = namedtuple("FactorTuple", "id,name,cls")
-F = FactorTuple
-
-all_factors = [
-    F("1", "Heat islands", None),
-    F("2", "Air pollution", PollutionFactor),
-]
-
-def get_factor(id):
-    return next((f for f in all_factors if f.id == str(id)))
+from .greendex import all_factors, Greendex
+from .satelites.api import HeatFactor
 
 
 @app.route('/', methods=["GET"])
@@ -27,9 +14,10 @@ def test():
 
 @app.route("/thermal")
 def thermal_test():
+    factor = HeatFactor()
     return {
         "result": {
-            "index": get_thermal_data()
+            "index": factor.get_index_layer(bounds=[17.006149, 48.087483, 17.227249, 48.21598], size=[500, 500])
         }
     }
 
@@ -38,27 +26,24 @@ def thermal_test():
 def index():
     data = request.get_json(force=True)
 
-    thermal_index = get_thermal_data(coords_bbox=data["bounds"], bounds_size=data['size'])
-
     size = data["size"]
     bounds = data["bounds"]
-    factor_weights = data["factorWeights"]
+    input_factors = data["factorWeights"]
 
-    num_factors = len(all_factors)
-    index_values = np.zeros((num_factors, size[0], size[1]))
+    if input_factors is None or len(input_factors) == 0 or sum(input_factors.values()) == 0.:
+        factors = all_factors
+        weights = [1] * len(factors)
+    else:
+        factors = [f for f in all_factors if f.id in input_factors.keys()]
+        weights = [input_factors[f.id] for f in factors]
 
-    # for i, factor_tuple in enumerate(all_factors):
-    #     factor = factor_tuple.cls()
-    #     index_values[i, ...] = factor.get_index_values(bounds, size)
+    index = Greendex.compute(factors, weights, bounds, size)
 
-    # weights =
-    # final_index = np.average(index_values, axis=0, weights=0)
-    pollution_index = PollutionFactor()
     return {
         "result": {
-            "bounds": data["bounds"],
+            "bounds": bounds,
             "size": size,
-            "index": pollution_index.get_index_values(bounds, size),
+            "index": index.tolist()
         }
     }
 
@@ -66,18 +51,5 @@ def index():
 @app.route("/factors", methods=["GET"])
 def factors():
     return {
-        "result": [
-            {
-                "id": 1,
-                "name": "Heat islands",
-            },
-            {
-                "id": 2,
-                "name": "Air pollution",
-            },
-            {
-                "id": 3,
-                "name": "Precipitation",
-            },
-        ]
+        "result": [f._asdict() for f in all_factors]
     }
